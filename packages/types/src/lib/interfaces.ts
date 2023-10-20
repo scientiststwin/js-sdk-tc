@@ -654,11 +654,8 @@ export interface EncryptToIpfsProps {
   // An instance of LitNodeClient that is already connected
   litNodeClient: ILitNodeClient;
 
-  // Your Infura Project Id
-  infuraId: string;
-
-  // Your Infura API Key Secret
-  infuraSecretKey: string;
+  // IPFS URL
+  ipfsURL: string
 }
 
 export interface DecryptFromIpfsProps {

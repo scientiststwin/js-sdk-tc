@@ -109,8 +109,7 @@ export const encryptToIpfs = async ({
   string,
   file,
   litNodeClient,
-  infuraId,
-  infuraSecretKey,
+  ipfsURL
 }: EncryptToIpfsProps): Promise<string> => {
   // -- validate
   const paramsIsSafe = safeParams({
@@ -142,15 +141,6 @@ export const encryptToIpfs = async ({
       errorKind: LIT_ERROR.INVALID_PARAM_TYPE.kind,
       errorCode: LIT_ERROR.INVALID_PARAM_TYPE.name,
     });
-
-  if (!infuraId || !infuraSecretKey) {
-    return throwError({
-      message:
-        'Please provide your Infura Project Id and Infura API Key Secret to add the encrypted metadata on IPFS',
-      errorKind: LIT_ERROR.INVALID_PARAM_TYPE.kind,
-      errorCode: LIT_ERROR.INVALID_PARAM_TYPE.name,
-    });
-  }
 
   let encryptedData;
   let symmetricKey;
@@ -188,13 +178,10 @@ export const encryptToIpfs = async ({
     'base16'
   );
 
-  const authorization =
-    'Basic ' + Buffer.from(`${infuraId}:${infuraSecretKey}`).toString('base64');
+  // const authorization =
+  //   'Basic ' + Buffer.from(`${infuraId}:${infuraSecretKey}`).toString('base64');
   const ipfs = ipfsClient.create({
-    url: 'https://ipfs.infura.io:5001/api/v0',
-    headers: {
-      authorization,
-    },
+    url: ipfsURL,
   });
 
   const encryptedDataJson = Buffer.from(
@@ -218,7 +205,7 @@ export const encryptToIpfs = async ({
   } catch (e) {
     return throwError({
       message:
-        "Provided INFURA_ID or INFURA_SECRET_KEY in invalid hence can't upload to IPFS",
+        "There is something wrong that we can not upload to IPFS",
       errorKind: LIT_ERROR.INVALID_ARGUMENT_EXCEPTION.kind,
       errorCode: LIT_ERROR.INVALID_ARGUMENT_EXCEPTION.name,
     });
